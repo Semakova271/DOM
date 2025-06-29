@@ -1,6 +1,6 @@
 # Игра "Поймай гоблина"
 
-[![CI Status](https://github.com/<your-username>/<your-repo>/workflows/Deploy%20to%20GitHub%20Pages/badge.svg)](https://github.com/Semakova271/DOM/actions)
+[![CI Status](https://github.com/Semakova271/DOM/workflows/Deploy%20to%20GitHub%20Pages/badge.svg)](https://github.com/Semakova271/DOM/actions)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-brightgreen)](https://Semakova271.github.io/DOM/)
 
 ## Описание
