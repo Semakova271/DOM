@@ -1,53 +1,46 @@
-// src/index.js
-import '../src/css/style.css'; // Импорт стилей
-import goblinImage from '../src/img/goblin.png'; // Импорт картинки гоблина
+import './css/style.css';
+import goblinImg from './img/goblin.png';
 
-document.addEventListener('DOMContentLoaded', () => {
-    const gameBoard = document.querySelector('.game-board');
-    const boardSize = 4;
-    let currentPosition = null;
+const boardSize = 4;
+const board = document.createElement('div');
+board.classList.add('game-board');
 
-    // Функция для создания игрового поля
-    function createBoard() {
-        for (let i = 0; i < boardSize * boardSize; i++) {
-            const cell = document.createElement('div');
-            cell.classList.add('game-board-cell');
-            cell.dataset.index = i;
-            gameBoard.appendChild(cell);
-        }
-    }
+// Создаем игровое поле
+for (let i = 0; i < boardSize * boardSize; i++) {
+  const cell = document.createElement('div');
+  cell.classList.add('cell');
+  board.appendChild(cell);
+}
 
-    // Функция для создания гоблина
-    function createGoblin() {
-        const goblin = document.createElement('img');
-        goblin.src = goblinImage;
-        goblin.alt = 'Goblin';
-        goblin.classList.add('goblin');
-        return goblin;
-    }
+document.body.append(board);
 
-    // Функция для получения случайной позиции
-    function getRandomPosition() {
-        return Math.floor(Math.random() * boardSize * boardSize);
-    }
+let currentCell = null;
 
-    // Функция для перемещения гоблина
-    function moveGoblin() {
-        let newPosition = getRandomPosition();
-        while (newPosition === currentPosition) {
-            newPosition = getRandomPosition(); // Чтобы не оставался на месте
-        }
+function getRandomCell() {
+  const cells = document.querySelectorAll('.cell');
+  return cells[Math.floor(Math.random() * cells.length)];
+}
 
-        const cells = document.querySelectorAll('.game-board-cell');
-        if (currentPosition !== null) {
-            cells[currentPosition].innerHTML = ''; // Очищаем предыдущую позицию
-        }
+function moveGoblin() {
+  const goblin = document.querySelector('.goblin');
 
-        cells[newPosition].appendChild(createGoblin()); // Добавляем гоблина в новую позицию
-        currentPosition = newPosition;
-    }
+  // Удаляем гоблина из текущей ячейки
+  if (goblin) {
+    goblin.remove();
+  }
 
-    createBoard();
-    moveGoblin(); // Первоначальное размещение гоблина
-    setInterval(moveGoblin, 1000); // Перемещаем гоблина каждую секунду
-});
+  let nextCell;
+  do {
+    nextCell = getRandomCell();
+  } while (nextCell === currentCell); // Чтобы не попасть в ту же ячейку
+
+  currentCell = nextCell;
+
+  // Создаем нового гоблина
+  const newGoblin = document.createElement('div');
+  newGoblin.classList.add('goblin');
+  currentCell.append(newGoblin);
+}
+
+// Запускаем интервал перемещения гоблина
+setInterval(moveGoblin, 1000);
