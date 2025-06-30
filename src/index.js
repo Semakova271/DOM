@@ -2,7 +2,7 @@ import './css/style.css';
 import goblinImage from './img/goblin.png';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const board = document.getElementById('board');
+  const board = document.querySelector('.board');
   const rows = 4;
   const cols = 4;
 

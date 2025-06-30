@@ -1,7 +1,24 @@
-.game-board {
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0;
+}
+
+.board {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
-  grid-gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 10px;
+  width: 440px;
+  height: 440px;
+  background-color: #8B4513; /* коричневый цвет для "земли" */
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .cell {
@@ -12,13 +29,19 @@
   position: relative;
 }
 
+.cell:hover {
+  background-color: #45a049;
+}
+
 .goblin {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80px;
-  height: 80px;
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  transition: transform 0.2s;
   background-image: url('../img/goblin.png');
   background-size: cover;
+}
+
+.goblin:hover {
+  transform: scale(1.1);
 }
