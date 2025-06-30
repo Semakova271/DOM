@@ -1,37 +1,47 @@
-# Исправляем версию actions/upload-artifact до актуальной v4
-# Обновляем workflow файл GitHub Actions
-
-name: Build and Deploy
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    # Используем последнюю стабильную версию checkout
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm install
+        # Используем npm install вместо ci, чтобы избежать проблем с package-lock.json
+        
+      - name: Build project
+        run: npm run build
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: 'dist'
 
-    # Устанавливаем Node.js
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-
-    # Собираем проект
-    - name: Install dependencies
-      run: npm install
-
-    - name: Build project
-      run: npm run build
-
-    # Исправленная строка - обновленная версия upload-pages-artifact
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v4 # Обновленная версия с v2 до v4
-      with:
-        path: './dist' # Путь к собранному проекту
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
