@@ -1,46 +1,49 @@
 import './css/style.css';
 import goblinImg from './img/goblin.png';
 
-const boardSize = 4;
-const board = document.createElement('div');
-board.classList.add('game-board');
-
-// Создаем игровое поле
-for (let i = 0; i < boardSize * boardSize; i++) {
-  const cell = document.createElement('div');
-  cell.classList.add('cell');
-  board.appendChild(cell);
-}
-
-document.body.append(board);
-
-let currentCell = null;
-
-function getRandomCell() {
-  const cells = document.querySelectorAll('.cell');
-  return cells[Math.floor(Math.random() * cells.length)];
-}
-
-function moveGoblin() {
-  const goblin = document.querySelector('.goblin');
-
-  // Удаляем гоблина из текущей ячейки
-  if (goblin) {
-    goblin.remove();
+document.addEventListener('DOMContentLoaded', () => {
+  const board = document.getElementById('board');
+  const rows = 4;
+  const cols = 4;
+  
+  // Создаем игровое поле
+  for (let i = 0; i < rows * cols; i += 1) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    board.appendChild(cell);
   }
-
-  let nextCell;
-  do {
-    nextCell = getRandomCell();
-  } while (nextCell === currentCell); // Чтобы не попасть в ту же ячейку
-
-  currentCell = nextCell;
-
-  // Создаем нового гоблина
-  const newGoblin = document.createElement('div');
-  newGoblin.classList.add('goblin');
-  currentCell.append(newGoblin);
-}
-
-// Запускаем интервал перемещения гоблина
-setInterval(moveGoblin, 1000);
+  
+  const cells = document.querySelectorAll('.cell');
+  const goblin = document.createElement('img');
+  goblin.src = goblinImage; // Используем импортированное изображение
+  goblin.className = 'goblin';
+  
+  let currentPosition = null;
+  
+  function getRandomPosition() {
+    let newPosition;
+    do {
+      newPosition = Math.floor(Math.random() * cells.length);
+    } while (newPosition === currentPosition && cells.length > 1);
+    return newPosition;
+  }
+  
+  function moveGoblin() {
+    const newPosition = getRandomPosition();
+    
+    if (currentPosition !== null) {
+      cells[currentPosition].innerHTML = '';
+    }
+    
+    cells[newPosition].append(goblin);
+    currentPosition = newPosition;
+  }
+  
+  // Начальная позиция
+  currentPosition = getRandomPosition();
+  cells[currentPosition].append(goblin);
+  
+  // Перемещаем каждую секунду
+  setInterval(moveGoblin, 1000);
+});
+// Добавляем пустую строку в конце файла
